@@ -49,6 +49,9 @@ Refer [here](https://github.com/actions/checkout/blob/v1/README.md) for previous
     # with the local git config, which enables your scripts to run authenticated git
     # commands. The post-job step removes the PAT.
     #
+    # If any of the submodules are private GitHub repos, pass in a PAT with read-access 
+    # to them. 
+    #
     # We recommend using a service account with the least permissions necessary. Also
     # when generating a new PAT, select the least scopes necessary.
     #
@@ -100,11 +103,12 @@ Refer [here](https://github.com/actions/checkout/blob/v1/README.md) for previous
     # Whether to checkout submodules: `true` to checkout submodules or `recursive` to
     # recursively checkout submodules.
     #
-    # When the `ssh-key` input is not provided, SSH URLs beginning with
-    # `git@github.com:` are converted to HTTPS.
+    # When neither the `ssh-key` nor the `token` inputs are provided, SSH URLs 
+    # beginning with `git@github.com:` are converted to HTTPS. 
     #
     # Default: false
     submodules: ''
+
 ```
 <!-- end usage -->
 
@@ -188,6 +192,17 @@ Refer [here](https://github.com/actions/checkout/blob/v1/README.md) for previous
     token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
     path: my-tools
 ```
+
+## Checkout a repo and its private submodules
+
+```yaml
+- name: Checkout
+  uses: actions/checkout@v2
+  with:
+    submodules: true
+    token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains a PAT with read-access to the private submodules
+```
+
 
 > - `${{ github.token }}` is scoped to the current repository, so if you want to checkout a different repository that is private you will need to provide your own [PAT](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
 
